@@ -1,0 +1,6 @@
+Django
+djangorestframework
+ipython
+pillow
+psycopg2
+reportlab
