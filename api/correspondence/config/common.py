@@ -37,7 +37,7 @@ class Common(Configuration):
         'django.contrib.admin',
     )
     THIRD_PARTY_APPS = (
-        'djangorestframework',  # REST APIs
+        'rest_framework',  # REST APIs
     )
 
     # Apps specific for this project go here.
@@ -107,7 +107,16 @@ class Common(Configuration):
 
     # DATABASE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-    DATABASES = values.DatabaseURLValue('postgres://localhost/postgres')
+    # DATABASES = values.DatabaseURLValue('postgres://postgres@localhost:5432/postgres')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'HOST': 'database',
+            'PORT': 5432,
+        }
+    }
     # END DATABASE CONFIGURATION
 
     # CACHING

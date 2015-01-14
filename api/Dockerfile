@@ -21,8 +21,8 @@ WORKDIR /home/python
 ADD ./ /home/python
 
 # manage requirements
-ENV ENQUIREMENTS_REFRESHED_AT 2015-01-13
-RUN ["pip3", "install", "cookiecutter"]
+ENV ENQUIREMENTS_REFRESHED_AT 2015-01-14
+RUN ["pip3", "install", "-r", "requirements.txt"]
 
 # uncomment the line below to use container as a non-root user
 # USER python:python
