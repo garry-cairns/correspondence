@@ -22,7 +22,7 @@ ADD ./ /home/python
 
 # manage requirements
 ENV ENQUIREMENTS_REFRESHED_AT 2015-01-13
-RUN ["pip3", "install", "-r", "requirements.txt"]
+RUN ["pip3", "install", "cookiecutter"]
 
 # uncomment the line below to use container as a non-root user
 # USER python:python
