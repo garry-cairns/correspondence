@@ -2,7 +2,7 @@ database:
     build: database
 api:
     build: api
-    command: /usr/bin/python3.4 correspondence/manage.py runserver 0.0.0.0:8000
+    command: /usr/bin/python3.4 manage.py runserver 0.0.0.0:8000
     volumes:
         - api/correspondence:/home/python/
     ports:
