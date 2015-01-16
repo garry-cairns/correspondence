@@ -1,19 +1,27 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url, include
 from django.conf.urls.static import static
-from letters.views import api_root
- 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()
- 
-urlpatterns = patterns('',
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
- 
-    # Your stuff: custom urls go here
-    url(r'^$', api_root),
-    url(r'^', include('letters.urls')),
- 
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+from rest_framework.routers import DefaultRouter
+from letters.views import (
+    ContentTemplateViewSet,
+    LetterFileViewSet,
+    LetterheadViewSet,
+    LetterTextViewSet,
+    LetterVariableViewSet,
+    LogoViewSet
+)
+
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'content-templates', ContentTemplateViewSet)
+router.register(r'letter-files', LetterFileViewSet)
+router.register(r'letterheads', LetterheadViewSet)
+router.register(r'letter-texts', LetterTextViewSet)
+router.register(r'letter-variables', LetterVariableViewSet)
+router.register(r'logos', LogoViewSet)
+
+# The API URLs are now determined automatically by the router.
+urlpatterns = [
+    url(r'^', include(router.urls)),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,12 +3,14 @@ from django.forms import widgets
 from rest_framework.serializers import HyperlinkedModelSerializer
 from letters.models import (
     ContentTemplate,
-    LetterText,
     LetterFile,
-    LetterVariable
+    Letterhead,
+    LetterText,
+    LetterVariable,
+    Logo
 )
- 
- 
+
+
 class ContentTemplateSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = ContentTemplate
@@ -20,8 +22,27 @@ class ContentTemplateSerializer(HyperlinkedModelSerializer):
             'start_time',
             'end_time'
         )
- 
- 
+
+
+class LetterFileSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = LetterFile
+        fields = ('url', 'letterfile')
+
+
+class LetterheadSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Letterhead
+        fields = (
+            'url',
+            'name',
+            'logo',
+            'layout',
+            'start_time',
+            'end_time'
+        )
+
+
 class LetterTextSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = LetterText
@@ -40,15 +61,15 @@ class LetterTextSerializer(HyperlinkedModelSerializer):
             'your_reference',
             'barcode',
         )
- 
- 
-class LetterFileSerializer(HyperlinkedModelSerializer):
-    class Meta:
-        model = LetterFile
-        fields = ('url', 'letterfile')
- 
- 
+
+
 class LetterVariableSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = LetterVariable
-        fields = ('letter_variable',)
+        fields = ('url', 'letter_variable',)
+
+
+class LogoSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Logo
+        fields = ('url', 'image')

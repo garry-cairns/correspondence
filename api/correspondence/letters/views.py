@@ -5,25 +5,29 @@ from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet
 from letters.models import (
     ContentTemplate,
-    LetterText,
     LetterFile,
-    LetterVariable
+    Letterhead,
+    LetterText,
+    LetterVariable,
+    Logo
 )
 from letters.serializers import (
     ContentTemplateSerializer,
-    LetterTextSerializer,
     LetterFileSerializer,
-    LetterVariableSerializer
+    LetterheadSerializer,
+    LetterTextSerializer,
+    LetterVariableSerializer,
+    LogoSerializer
 )
- 
- 
+
+
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
         'content_template': reverse('content-template-list', request=request, format=format)
 })
- 
- 
+
+
 class ContentTemplateViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -31,17 +35,8 @@ class ContentTemplateViewSet(ModelViewSet):
     """
     queryset = ContentTemplate.objects.all()
     serializer_class = ContentTemplateSerializer
- 
- 
-class LetterTextViewSet(ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
-    queryset = LetterText.objects.all()
-    serializer_class = LetterTextSerializer
- 
- 
+
+
 class LetterFileViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -49,8 +44,26 @@ class LetterFileViewSet(ModelViewSet):
     """
     queryset = LetterFile.objects.all()
     serializer_class = LetterFileSerializer
- 
- 
+
+
+class LetterheadViewSet(ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+    queryset = Letterhead.objects.all()
+    serializer_class = LetterheadSerializer
+
+
+class LetterTextViewSet(ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+    queryset = LetterText.objects.all()
+    serializer_class = LetterTextSerializer
+
+
 class LetterVariableViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -58,3 +71,12 @@ class LetterVariableViewSet(ModelViewSet):
     """
     queryset = LetterVariable.objects.all()
     serializer_class = LetterVariableSerializer
+
+
+class LogoViewSet(ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+    queryset = Logo.objects.all()
+    serializer_class = LogoSerializer
