@@ -6,6 +6,7 @@ from django.db.models import (
     FileField,
     ForeignKey,
     ImageField,
+    IntegerField,
     Model,
     TextField,
 )
@@ -44,19 +45,49 @@ class LetterFile(Model):
 class Letterhead(Model):
     """Letterhead object. Attributes:
     * :attr: `~letters.models.Letterhead.name` - letterhead name
+    * :attr: `~letters.models.Letterhead.font` - letterhead main font
     * :attr: `~letters.models.Letterhead.logo` - link to letterhead logo
-    * :attr: `~letters.models.Letterhead.layout` - string representing
-      a reportlab outline document
+    * :attr: `~letters.models.Letterhead.logo_x` - logo x co-ordinate
+    * :attr: `~letters.models.Letterhead.logo_y` - logo y co-ordinate
+    * :attr: `~letters.models.Letterhead.return_contacts` - return contact information
+    * :attr: `~letters.models.Letterhead.return_contacts_x` - return contact information x co-ordinate
+    * :attr: `~letters.models.Letterhead.return_contacts_y` - return contact information y co-ordinate
+    * :attr: `~letters.models.Letterhead.your_reference_x` - recipient reference x co-ordinate
+    * :attr: `~letters.models.Letterhead.your_reference_y` - recipient reference x co-ordinate
+    * :attr: `~letters.models.Letterhead.our_reference_x` - our reference x co-ordinate
+    * :attr: `~letters.models.Letterhead.our_reference_y` - our reference y co-ordinate
     * :attr: `~letters.models.Letterhead.created` - date on which the
       letterhead was created
     * :attr: `~letters.models.Letterhead.start_time` - date on which the
       letterhead was made available to users
     * :attr: `~letters.models.Letterhead.end_time` - date on which the
       letterhead ceased being available to users
-   """
+    """
+    COURIER = 1
+    HELVETICA = 2
+    TIMES = 3
+    FONT_CHOICES = (
+            (COURIER, 'Courier'),
+            (HELVETICA, 'Helvetica'),
+            (TIMES, 'Times'),
+        )
     name = CharField(max_length=100)
+    font = IntegerField(
+            choices=FONT_CHOICES,
+            default=HELVETICA,
+            help_text="Choices are restricted to those available as standard in PDFs. This is essential to our archiving requirements.",
+        )
     logo = ForeignKey("Logo")
-    layout = TextField()
+    logo_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of logo")
+    logo_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of logo")
+    return_contacts = TextField()
+    return_contacts_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of return contacts")
+    return_contacts_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of return contacts")
+    # Reference blocks handle position only, values provided with LetterText to minimize object creation events
+    your_reference_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of recipient's reference")
+    your_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of recipient's reference")
+    our_reference_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of our reference")
+    our_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of our reference")
     created = DateTimeField()
     start_time = DateTimeField()
     end_time = DateTimeField()
