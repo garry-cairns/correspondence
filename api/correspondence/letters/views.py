@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet
-from letters.letter_builer import LetterCanvas
+from letters.letter_builder import LetterCanvas
 from letters.models import (
     ContentTemplate,
     LetterFile,
@@ -33,6 +33,7 @@ class ContentTemplateViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
+    And chips. Mmm chips.
     """
     queryset = ContentTemplate.objects.all()
     serializer_class = ContentTemplateSerializer

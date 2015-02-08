@@ -36,8 +36,20 @@ class LetterheadSerializer(HyperlinkedModelSerializer):
         fields = (
             'url',
             'name',
+            'font',
             'logo',
-            'layout',
+            'logo_x',
+            'logo_y',
+            'logo_width',
+            'logo_height',
+            'return_contacts',
+            'return_contacts_x',
+            'return_contacts_y',
+            'your_reference_x',
+            'your_reference_y',
+            'our_reference_x',
+            'our_reference_y',
+            'created',
             'start_time',
             'end_time'
         )

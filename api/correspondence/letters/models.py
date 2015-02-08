@@ -49,6 +49,8 @@ class Letterhead(Model):
     * :attr: `~letters.models.Letterhead.logo` - link to letterhead logo
     * :attr: `~letters.models.Letterhead.logo_x` - logo x co-ordinate
     * :attr: `~letters.models.Letterhead.logo_y` - logo y co-ordinate
+    * :attr: `~letters.models.Letterhead.logo_width` - logo width
+    * :attr: `~letters.models.Letterhead.logo_height` - logo height
     * :attr: `~letters.models.Letterhead.return_contacts` - return contact information
     * :attr: `~letters.models.Letterhead.return_contacts_x` - return contact information x co-ordinate
     * :attr: `~letters.models.Letterhead.return_contacts_y` - return contact information y co-ordinate
@@ -80,6 +82,8 @@ class Letterhead(Model):
     logo = ForeignKey("Logo")
     logo_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of logo")
     logo_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of logo")
+    logo_width = IntegerField(help_text="Logo width in mm")
+    logo_height = IntegerField(help_text="Logo height in mm")
     return_contacts = TextField()
     return_contacts_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of return contacts")
     return_contacts_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of return contacts")
@@ -88,9 +92,9 @@ class Letterhead(Model):
     your_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of recipient's reference")
     our_reference_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of our reference")
     our_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of our reference")
-    created = DateTimeField()
-    start_time = DateTimeField()
-    end_time = DateTimeField()
+    created = DateTimeField(auto_now_add=True)
+    start_time = DateTimeField(auto_now_add=True)
+    end_time = DateTimeField(auto_now_add=True)
 
 
 class LetterText(Model):

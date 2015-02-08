@@ -11,7 +11,8 @@ from reportlab.platypus import (
         Spacer,
         Table,
     )
-from letter_design import STYLES
+from .letter_design import STYLES
+from .models import Letterhead
 
 
 class NumberedCanvas(canvas.Canvas):
@@ -37,15 +38,16 @@ class NumberedCanvas(canvas.Canvas):
         # Change the position of this to wherever you want the page number to be
         self.drawRightString(
                 195 * mm,
-                15 * mm,
+                10 * mm,
                 "Page %d of %d" % (self._pageNumber, page_count)
             )
 
 
 class LetterCanvas(object):
-    def __init__(self, body_text):
+    def __init__(self, letterhead, body_text):
         """Constructor"""
-        self.letter_text = letter_text
+        self.letterhead = Letterhead.objects.get(pk=letterhead)
+        self.body_text = body_text
         self.pagesize = A4
         self.width, self.height = self.pagesize
 
@@ -59,19 +61,18 @@ class LetterCanvas(object):
                 leftMargin=15*mm,
                 topMargin=20*mm,
                 bottomMargin=30*mm,
-                pagesize=self.pagesize
+                pagesize=self.pagesize,
             )
         self.elements = [Spacer(1, 67*mm)]
         self.insert_content()
         self.doc.build(
                 self.elements,
-                onFirstPage=self._first_page,
-                onLaterPages=self._subsequent_pages,
+                onFirstPage=self.first_page,
+                onLaterPages=self.subsequent_pages,
                 canvasmaker=NumberedCanvas
             )
 
-    @staticmethod
-    def _first_page(canvas, doc):
+    def first_page(self, canvas, doc):
         """
         Defines layout for the first page of our letter.
         """
@@ -79,20 +80,31 @@ class LetterCanvas(object):
         canvas.saveState()
 
         # Logo block
-        logo = Image('http://upload.wikimedia.org/wikipedia/commons/9/9a/PNG_transparency_demonstration_2.png', width=70*mm, height=50*mm)
+        logo = Image(
+                self.letterhead.logo.image,
+                width=self.letterhead.logo_width*mm,
+                height=self.letterhead.logo_height*mm
+            )
         logo.wrapOn(canvas, doc.width/2.0, doc.height)
-        logo.drawOn(canvas, 15*mm, 232*mm)
+        logo.drawOn(
+                canvas,
+                self.letterhead.logo_x*mm,
+                (297-self.letterhead.logo_y-self.letterhead.logo_height)*mm
+            )
 
         # Return address block
-        ptext = """Return<br/>
-        Address1<br/>
-        Address2<br/>
-        Address3<br/>
-        Address4<br/>
-        Postcode"""
+        ptext = "<br/>".join([line for line in self.letterhead.return_contacts.split('\n')])
         p = Paragraph(ptext, STYLES['ReturnAddress'])
-        p.wrapOn(canvas, doc.width/3.0, doc.height)
-        p.drawOn(canvas, 130*mm, 232*mm)
+        p.wrapOn(
+                canvas,
+                doc.width/3.0,
+                doc.height
+            )
+        p.drawOn(
+                canvas,
+                self.letterhead.return_contacts_x*mm,
+                (297-self.letterhead.return_contacts_y)*mm
+            )
 
         # Recipient address block
         ptext = """<font size=12>Recipient<br/>
@@ -113,8 +125,7 @@ class LetterCanvas(object):
         # Release the canvas
         canvas.restoreState()
 
-    @staticmethod
-    def _subsequent_pages(canvas, doc):
+    def subsequent_pages(self, canvas, doc):
         """
         Defines layout for all pages of our letter but the first.
         """
@@ -140,15 +151,10 @@ class LetterCanvas(object):
         """
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for full list of functionality.
-
-        letter_text = [
-            'Donec nec nunc eu ante luctus sodales eu ac massa. Duis id auctor sapien. Sed vel faucibus sem. Suspendisse potenti. Proin ut augue condimentum, semper leo sed, laoreet odio. Nam lobortis vel elit sit amet egestas. Vestibulum congue nisi non semper sollicitudin.',
-            ]
-
         self.elements.append(Paragraph(datetime.datetime.now().strftime("%d %B %y"), STYLES['DateLine']))
         self.elements.append(Paragraph('Letter title', STYLES['LetterTitle']))
         self.elements.append(Paragraph('Dear sir or madam', STYLES['Salutation']))
-        for i, par in enumerate(lipsum):
+        for i, par in enumerate(self.body_text.split('\n')):
             self.elements.append(Paragraph(par, STYLES['LetterBody']))
         self.elements.append(Paragraph('Yours sincerely', STYLES['Salutation']))
         self.elements.append(Paragraph('A Person', STYLES['Signature']))
