@@ -22,16 +22,12 @@ from .common import Common
 
 class Production(Common):
 
-    # This ensures that Django will be able to detect a secure connection
-    # properly on Heroku.
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
     # INSTALLED_APPS
     INSTALLED_APPS = Common.INSTALLED_APPS
     # END INSTALLED_APPS
 
     # SECRET KEY
-    SECRET_KEY = values.SecretValue()
+    SECRET_KEY = "Change me" # values.SecretValue()
     # END SECRET KEY
 
     # django-secure
@@ -66,15 +62,11 @@ class Production(Common):
     STATICFILES_STORAGE = DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
     # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html#settings
-    AWS_ACCESS_KEY_ID = values.SecretValue()
-    AWS_SECRET_ACCESS_KEY = values.SecretValue()
-    AWS_STORAGE_BUCKET_NAME = values.SecretValue()
+    AWS_ACCESS_KEY_ID = "test" # values.SecretValue()
+    AWS_SECRET_ACCESS_KEY = "test" # values.SecretValue()
+    AWS_STORAGE_BUCKET_NAME = "test" # values.SecretValue()
     AWS_AUTO_CREATE_BUCKET = True
     AWS_QUERYSTRING_AUTH = False
-
-    # see: https://github.com/antonagestam/collectfast
-    AWS_PRELOAD_METADATA = True
-    INSTALLED_APPS += ('collectfast', )
 
     # AWS cache settings, don't change unless you know what you're doing:
     AWS_EXPIRY = 60 * 60 * 24 * 7
@@ -90,8 +82,8 @@ class Production(Common):
     # EMAIL
     DEFAULT_FROM_EMAIL = values.Value('Correspondence <noreply@example.com>')
     EMAIL_HOST = values.Value('smtp.sendgrid.com')
-    EMAIL_HOST_PASSWORD = values.SecretValue(environ_prefix="", environ_name="SENDGRID_PASSWORD")
-    EMAIL_HOST_USER = values.SecretValue(environ_prefix="", environ_name="SENDGRID_USERNAME")
+    EMAIL_HOST_PASSWORD = "test" # values.SecretValue(environ_prefix="", environ_name="SENDGRID_PASSWORD")
+    EMAIL_HOST_USER = "test" # values.SecretValue(environ_prefix="", environ_name="SENDGRID_USERNAME")
     EMAIL_PORT = values.IntegerValue(587, environ_prefix="", environ_name="EMAIL_PORT")
     EMAIL_SUBJECT_PREFIX = values.Value('[Correspondence] ', environ_name="EMAIL_SUBJECT_PREFIX")
     EMAIL_USE_TLS = True

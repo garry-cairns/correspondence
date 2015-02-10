@@ -21,7 +21,7 @@ WORKDIR /home/python
 ADD ./ /home/python
 
 # manage requirements
-ENV ENQUIREMENTS_REFRESHED_AT 2015-01-14
+ENV REQUIREMENTS_REFRESHED_AT 2015-02-09
 RUN ["pip3", "install", "-r", "requirements.txt"]
 
 # uncomment the line below to use container as a non-root user

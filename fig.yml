@@ -9,3 +9,10 @@ api:
         - "8000:8000"
     links:
         - database
+webserver:
+    build: webserver
+    ports:
+        - "80:80"
+        - "443:443"
+    links:
+        - api

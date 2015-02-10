@@ -44,10 +44,11 @@ class NumberedCanvas(canvas.Canvas):
 
 
 class LetterCanvas(object):
-    def __init__(self, letterhead, body_text):
+    def __init__(self, letterhead, body_text, response_FLO):
         """Constructor"""
         self.letterhead = Letterhead.objects.get(pk=letterhead)
         self.body_text = body_text
+        self.response_FLO = response_FLO
         self.pagesize = A4
         self.width, self.height = self.pagesize
 
@@ -56,7 +57,7 @@ class LetterCanvas(object):
         Run the report
         """
         self.doc = SimpleDocTemplate(
-                "form_letter.pdf",
+                self.response_FLO,
                 rightMargin=15*mm,
                 leftMargin=15*mm,
                 topMargin=20*mm,
