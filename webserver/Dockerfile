@@ -15,5 +15,5 @@ EXPOSE 80 443
 # load nginx conf
 ADD ./site.conf /etc/nginx/sites-available/correspondence
 RUN ["ln", "-s", "/etc/nginx/sites-available/correspondence", "/etc/nginx/sites-enabled/correspondence"]
-
+RUN ["rm", "-rf", "/etc/nginx/sites-available/default"]
 CMD ["nginx", "-g", "daemon off;"]
