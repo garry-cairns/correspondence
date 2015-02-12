@@ -2,7 +2,8 @@ database:
     build: database
 api:
     build: api
-    command: /usr/bin/python3.4 manage.py runserver 0.0.0.0:8000
+    command: /usr/bin/python3.4 manage.py migrate
+    command: gunicorn -b 0.0.0.0:8000 wsgi:application
     volumes:
         - api/correspondence:/home/python/
     links:
