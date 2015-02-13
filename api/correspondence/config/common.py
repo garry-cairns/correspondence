@@ -29,12 +29,6 @@ class Common(Configuration):
         'django.contrib.sites',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-
-        # Useful template tags:
-        # 'django.contrib.humanize',
-
-        # Admin
-        'django.contrib.admin',
     )
     THIRD_PARTY_APPS = (
         'rest_framework',  # REST APIs
@@ -176,7 +170,7 @@ class Common(Configuration):
 
     # STATIC FILE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-    STATIC_ROOT = join(os.path.dirname(BASE_DIR), 'staticfiles')
+    STATIC_ROOT = join(BASE_DIR, 'staticfiles')
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
     STATIC_URL = '/static/'
