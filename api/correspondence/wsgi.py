@@ -14,6 +14,7 @@ framework.
 
 """
 import os
+from django.conf import settings
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
@@ -30,6 +31,7 @@ from whitenoise.django import DjangoWhiteNoise
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
+application.add_files(settings.MEDIA_ROOT, settings.MEDIA_URL)
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
