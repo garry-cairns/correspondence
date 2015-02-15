@@ -47,9 +47,9 @@ class NumberedCanvas(canvas.Canvas):
 class LetterCanvas(object):
     def __init__(self, letterhead, content_template, letter_text, response_FLO):
         """Constructor"""
-        self.letterhead = Letterhead.objects.get(pk=letterhead)
-        self.content_template = ContentTemplate.objects.get(pk=content_template)
-        self.letter_text = LetterText.objects.get(pk=letter_text)
+        self.letterhead = letterhead
+        self.content_template = content_template
+        self.letter_text = letter_text
         self.response_FLO = response_FLO
         self.pagesize = A4
         self.width, self.height = self.pagesize
@@ -106,7 +106,7 @@ class LetterCanvas(object):
         p.drawOn(
                 canvas,
                 self.letterhead.return_contacts_x*mm,
-                (297-self.letterhead.return_contacts_y)*mm
+                (257-self.letterhead.return_contacts_y)*mm
             )
 
         # Recipient address block
@@ -126,7 +126,7 @@ class LetterCanvas(object):
         p.drawOn(canvas, 15*mm, 197*mm)
 
         # Footer
-        footer = Paragraph('Return address, Where we live, City, Postcode', STYLES['Normal'])
+        footer = Paragraph(self.letter_text.barcode, STYLES['Normal'])
         w, h = footer.wrap(doc.width, doc.bottomMargin)
         footer.drawOn(canvas, doc.leftMargin, h)
 
@@ -146,8 +146,8 @@ class LetterCanvas(object):
         header.drawOn(canvas, doc.leftMargin, doc.height + doc.topMargin + doc.bottomMargin - h*mm)
 
         # Footer
-        footer = Paragraph('Return address, Where we live, City, Postcode', STYLES['Normal'])
-        w, h = footer.wrap(doc.width, doc.bottomMargin-(15*mm))
+        footer = Paragraph(self.letter_text.barcode, STYLES['Normal'])
+        w, h = footer.wrap(doc.width, doc.bottomMargin)
         footer.drawOn(canvas, doc.leftMargin, h)
 
         # Release the canvas
@@ -159,7 +159,7 @@ class LetterCanvas(object):
         """
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for full list of functionality.
-        self.elements.append(Paragraph(self.letter_text.date_sent.strftime("%d %B %y"), STYLES['DateLine']))
+        self.elements.append(Paragraph(self.letter_text.date_sent.strftime("%d %B %Y"), STYLES['DateLine']))
         self.elements.append(Paragraph(self.letter_text.letter_title, STYLES['LetterTitle']))
         if self.letter_text.addressee_is_organisation:
             salutation = "Dear sir or madam,"

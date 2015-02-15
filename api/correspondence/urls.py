@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from letters.views import (
     ContentTemplateViewSet,
-    LetterFileViewSet,
     LetterheadViewSet,
     LetterTextViewSet,
     LetterVariableViewSet,
@@ -15,7 +14,6 @@ from letters.views import (
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'content-templates', ContentTemplateViewSet)
-router.register(r'letter-files', LetterFileViewSet)
 router.register(r'letterheads', LetterheadViewSet)
 router.register(r'letter-texts', LetterTextViewSet)
 router.register(r'letter-variables', LetterVariableViewSet)

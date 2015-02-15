@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-from rest_framework.decorators import api_view
+from django.http import HttpResponse
+from rest_framework import renderers
+from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet
 from letters.letter_builder import LetterCanvas
 from letters.models import (
     ContentTemplate,
-    LetterFile,
     Letterhead,
     LetterText,
     LetterVariable,
     Logo
 )
+from letters.renderers import PDFRenderer
 from letters.serializers import (
     ContentTemplateSerializer,
-    LetterFileSerializer,
     LetterheadSerializer,
     LetterTextSerializer,
     LetterVariableSerializer,
@@ -33,19 +34,9 @@ class ContentTemplateViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
-    And chips. Mmm chips.
     """
     queryset = ContentTemplate.objects.all()
     serializer_class = ContentTemplateSerializer
-
-
-class LetterFileViewSet(ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
-    """
-    queryset = LetterFile.objects.all()
-    serializer_class = LetterFileSerializer
 
 
 class LetterheadViewSet(ModelViewSet):
@@ -61,9 +52,29 @@ class LetterTextViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
+    Append 'letter' to the URL to retrieve the instance as a formatted
+    PDF letter.
     """
     queryset = LetterText.objects.all()
     serializer_class = LetterTextSerializer
+
+    @detail_route(renderer_classes=[PDFRenderer])
+    def letter(self, request, *args, **kwargs):
+        """
+        Takes a LetterText instance and a django request and returns
+        a PDF letter as the request response.
+        """
+        letter = self.get_object()
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "attachment; filename={0}.pdf".format(letter.letter_title)
+        letter = LetterCanvas(
+                letter.letterhead,
+                letter.content_template,
+                letter,
+                response,
+            )
+        letter.run()
+        return response
 
 
 class LetterVariableViewSet(ModelViewSet):
