@@ -12,7 +12,8 @@ from reportlab.platypus import (
         Table,
     )
 from .letter_design import STYLES
-from .models import Letterhead
+from .letter_processor import ProcessedText
+from .models import Letterhead, ContentTemplate, LetterText
 
 
 class NumberedCanvas(canvas.Canvas):
@@ -44,10 +45,11 @@ class NumberedCanvas(canvas.Canvas):
 
 
 class LetterCanvas(object):
-    def __init__(self, letterhead, body_text, response_FLO):
+    def __init__(self, letterhead, content_template, letter_text, response_FLO):
         """Constructor"""
         self.letterhead = Letterhead.objects.get(pk=letterhead)
-        self.body_text = body_text
+        self.content_template = ContentTemplate.objects.get(pk=content_template)
+        self.letter_text = LetterText.objects.get(pk=letter_text)
         self.response_FLO = response_FLO
         self.pagesize = A4
         self.width, self.height = self.pagesize
@@ -108,12 +110,17 @@ class LetterCanvas(object):
             )
 
         # Recipient address block
-        ptext = """<font size=12>Recipient<br/>
-        Address1<br/>
-        Address2<br/>
-        Address3<br/>
-        Address4<br/>
-        Postcode</font>"""
+        ptext = "<font size=12>" + "<br/>".join(
+                [
+                    self.letter_text.addressee,
+                    self.letter_text.address_1, 
+                    self.letter_text.address_2, 
+                    self.letter_text.address_3, 
+                    self.letter_text.town, 
+                    self.letter_text.postcode, 
+                    "</font>",
+                ]
+            )
         p = Paragraph(ptext, STYLES['Normal'])
         p.wrapOn(canvas, doc.width-300, doc.height)
         p.drawOn(canvas, 15*mm, 197*mm)
@@ -152,11 +159,21 @@ class LetterCanvas(object):
         """
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for full list of functionality.
-        self.elements.append(Paragraph(datetime.datetime.now().strftime("%d %B %y"), STYLES['DateLine']))
-        self.elements.append(Paragraph('Letter title', STYLES['LetterTitle']))
-        self.elements.append(Paragraph('Dear sir or madam', STYLES['Salutation']))
-        for i, par in enumerate(self.body_text.split('\n')):
+        self.elements.append(Paragraph(self.letter_text.date_sent.strftime("%d %B %y"), STYLES['DateLine']))
+        self.elements.append(Paragraph(self.letter_text.letter_title, STYLES['LetterTitle']))
+        if self.letter_text.addressee_is_organisation:
+            salutation = "Dear sir or madam,"
+            sign_off = "Yours faithfully,"
+        else:
+            salutation = "Dear " + self.letter_text.addressee + ","
+            sign_off = "Yours sincerely,"
+        self.elements.append(Paragraph(salutation, STYLES['Salutation']))
+        flowable_text = ProcessedText(
+                self.content_template,
+                self.letter_text
+            ).process().decode('utf-8')
+        for i, par in enumerate(flowable_text.split('\n')):
             self.elements.append(Paragraph(par, STYLES['LetterBody']))
-        self.elements.append(Paragraph('Yours sincerely', STYLES['Salutation']))
-        self.elements.append(Paragraph('A Person', STYLES['Signature']))
-        self.elements.append(Paragraph('Case officer', STYLES['SignatoryTitle']))
+        self.elements.append(Paragraph(sign_off, STYLES['Salutation']))
+        self.elements.append(Paragraph(self.letter_text.sender_name, STYLES['Signature']))
+        self.elements.append(Paragraph(self.letter_text.sender_title, STYLES['SignatoryTitle']))

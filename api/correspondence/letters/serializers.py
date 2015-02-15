@@ -16,7 +16,6 @@ class ContentTemplateSerializer(HyperlinkedModelSerializer):
         model = ContentTemplate
         fields = (
             'url',
-            'letterhead',
             'text',
             'created',
             'start_time',
@@ -60,18 +59,24 @@ class LetterTextSerializer(HyperlinkedModelSerializer):
         model = LetterText
         fields =  (
             'url',
+            'letterhead',
             'content_template',
-            'text',
-            'date_sent',
             'addressee',
             'address_1',
             'address_2',
             'address_3',
-            'address_4',
+            'town',
             'postcode',
             'our_reference',
             'your_reference',
+            'date_sent',
+            'letter_title',
+            'addressee_is_organisation,',
+            'addressee_is_representative,',
+            'sender_name,',
+            'sender_title,',
             'barcode',
+            'additional_data',
         )
 
 

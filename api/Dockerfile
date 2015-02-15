@@ -25,4 +25,4 @@ ENV REQUIREMENTS_REFRESHED_AT 2015-02-13
 RUN ["pip3", "install", "-r", "requirements.txt"]
 
 # uncomment the line below to use container as a non-root user
-USER python:python
+# USER python:python

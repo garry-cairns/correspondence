@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.core.cache import cache
 from django.db.models import (
+    BooleanField,
     CharField,
     DateTimeField,
     FileField,
     ForeignKey,
     ImageField,
     IntegerField,
+    ManyToManyField,
     Model,
     TextField,
 )
@@ -14,8 +16,6 @@ from django.db.models import (
 
 class ContentTemplate(Model):
     """ContentTemplate object. Attributes:
-    * :attr: `~letters.models.ContentTemplate.letterhead` - link to current
-      letterhead
     * :attr: `~letters.models.ContentTemplate.name` - document name
       letterhead
     * :attr: `~letters.models.ContentTemplate.text` - string representing
@@ -27,11 +27,10 @@ class ContentTemplate(Model):
     * :attr: `~letters.models.ContentTemplate.end_time` - date on which the
       content template ceased being available to users
     """
-    letterhead = ForeignKey("Letterhead")
     text = TextField()
-    created = DateTimeField()
-    start_time = DateTimeField()
-    end_time = DateTimeField()
+    created = DateTimeField(auto_now_add=True)
+    start_time = DateTimeField(auto_now_add=True)
+    end_time = DateTimeField(auto_now_add=True)
 
 
 class LetterFile(Model):
@@ -99,11 +98,10 @@ class Letterhead(Model):
 
 class LetterText(Model):
     """LetterText object. Attributes:
+    * :attr: `~letters.models.LetterText.letterhead` - link to current
+      letterhead
     * :attr: `~letters.models.LetterText.content_template` - link to
       relevant content template
-      the letter's full text
-    * :attr: `~letters.models.LetterText.text` - string representing
-      the letter's full text
     * :attr: `~letters.models.LetterText.date_sent` - date on which we
       issued the letter
     * :attr: `~letters.models.LetterText.addressee` - person or
@@ -120,29 +118,82 @@ class LetterText(Model):
     * :attr: `~letters.models.LetterText.barcode` - the barcode string
       from which we will generate the QR code
     * :attr: `~letters.models.LetterText.additional_data` - client-provided
-      string of JSON with additional variables
+      dictionary with additional variables and their values
     """
+    letterhead = ForeignKey("Letterhead")
     content_template = ForeignKey("ContentTemplate")
-    text = TextField()
-    date_sent = DateTimeField()
     addressee = CharField(max_length=100)
     address_1 = CharField(max_length=100)
-    address_2 = CharField(max_length=100)
-    address_3 = CharField(max_length=100)
-    address_4 = CharField(max_length=100)
+    address_2 = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    address_3 = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    town = CharField(max_length=100)
     postcode = CharField(max_length=100)
-    our_reference = CharField(max_length=100)
-    your_reference = CharField(max_length=100)
-    barcode = CharField(max_length=100)
-    additional_data = TextField() # client packages these into one string
+    our_reference = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    your_reference = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    date_sent = DateTimeField(auto_now_add=True)
+    letter_title = CharField(max_length=100)
+    addressee_is_organisation = BooleanField(default=False)
+    addressee_is_representative = BooleanField(default=False)
+    sender_name = CharField(max_length=100)
+    sender_title = CharField(max_length=100)
+    barcode = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    additional_data = TextField( # client packages these into one string
+            blank=True,
+            null=True,
+        )
+
+    def compulsory_variable_dictionary(self):
+        return {
+                'addressee': self.addressee,
+                'address_1': self.address_1,
+                'address_2': self.address_2,
+                'address_3': self.address_3,
+                'town': self.town,
+                'postcode': self.postcode,
+                'our_reference': self.our_reference,
+                'your_reference': self.your_reference,
+                'addressee_is_organisation': self.addressee_is_organisation,
+                'addressee_is_representative': self.addressee_is_representative,
+                'sender_name': self.sender_name,
+                'sender_title': self.sender_title,
+                }
 
 
 class LetterVariable(Model):
     """LetterVariable object. Attributes:
-    * :attr: `~letters.models.LetterVariable.letter_variable` - variable
+    * :attr: `~letters.models.LetterVariable.variable_name` - variable
+      available in a given template
+    * :attr: `~letters.models.LetterVariable.variable_value` - variables
       available in a given template
     """
-    letter_variable = CharField(max_length=100)
+    content_template = ManyToManyField("ContentTemplate")
+    variable_name = CharField(max_length=100)
+    variable_value = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+            default="",
+        )
 
 
 class Logo(Model):
