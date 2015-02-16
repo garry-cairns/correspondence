@@ -179,7 +179,7 @@ class LetterCanvas(object):
         canvas.saveState()
 
         # Header
-        header = Paragraph('Letter type', STYLES['Normal'])
+        header = Paragraph(self.content_template.name, STYLES['Normal'])
         w, h = header.wrap(doc.width, doc.topMargin)
         header.drawOn(canvas, doc.leftMargin, doc.height + doc.topMargin + doc.bottomMargin - h*mm)
 

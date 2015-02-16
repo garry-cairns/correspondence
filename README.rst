@@ -28,4 +28,4 @@ This will build your database, api and webserver, and link them to each other.
 Deployment
 ------------
 
-Because the app is built with Docker containers it will deploy reliably and repeatably anywhere that has a working Docker and fig installations.
+Because the app is built with Docker containers it will deploy reliably and repeatably anywhere that has working Docker and fig installations.
