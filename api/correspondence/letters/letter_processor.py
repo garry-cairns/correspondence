@@ -2,7 +2,7 @@
 import ast
 from django.template import Template
 from django.template.response import SimpleTemplateResponse
-from .models import ContentTemplate, LetterText
+from .models import ContentTemplate, Letter
 
 
 class ProcessedText(object):
@@ -11,9 +11,12 @@ class ProcessedText(object):
         self.content_template = content_template
         self.letter_text = letter_text
         self.variables = self.content_template.lettervariable_set.all()
-        self.variable_values = ast.literal_eval(
-                letter_text.additional_data
-            )
+        try:
+            self.variable_values = ast.literal_eval(
+                    letter_text.additional_data
+                )
+        except:
+            self.variable_values = {}
 
     def process(self):
         """

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-import sys
 import datetime
+import sys
+from reportlab.graphics import renderPDF
+from reportlab.graphics.barcode.qr import QrCodeWidget
+from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
@@ -13,7 +16,7 @@ from reportlab.platypus import (
     )
 from .letter_design import STYLES
 from .letter_processor import ProcessedText
-from .models import Letterhead, ContentTemplate, LetterText
+from .models import Letterhead, ContentTemplate, Letter
 
 
 class NumberedCanvas(canvas.Canvas):
@@ -45,11 +48,11 @@ class NumberedCanvas(canvas.Canvas):
 
 
 class LetterCanvas(object):
-    def __init__(self, letterhead, content_template, letter_text, response_FLO):
+    def __init__(self, letterhead, content_template, letter, response_FLO):
         """Constructor"""
         self.letterhead = letterhead
         self.content_template = content_template
-        self.letter_text = letter_text
+        self.letter = letter
         self.response_FLO = response_FLO
         self.pagesize = A4
         self.width, self.height = self.pagesize
@@ -60,10 +63,10 @@ class LetterCanvas(object):
         """
         self.doc = SimpleDocTemplate(
                 self.response_FLO,
-                rightMargin=15*mm,
-                leftMargin=15*mm,
-                topMargin=20*mm,
-                bottomMargin=30*mm,
+                rightMargin=self.letterhead.right_margin*mm,
+                leftMargin=self.letterhead.left_margin*mm,
+                topMargin=self.letterhead.top_margin*mm,
+                bottomMargin=self.letterhead.bottom_margin*mm,
                 pagesize=self.pagesize,
             )
         self.elements = [Spacer(1, 67*mm)]
@@ -109,15 +112,45 @@ class LetterCanvas(object):
                 (257-self.letterhead.return_contacts_y)*mm
             )
 
+        # Reference block
+        ptext = "Your reference: " + self.letter.your_reference
+        p = Paragraph(ptext, STYLES['ReturnAddress'])
+        p.wrapOn(
+                canvas,
+                doc.width/3.0,
+                doc.height
+            )
+        p.drawOn(
+                canvas,
+                self.letterhead.your_reference_x*mm,
+                (257-self.letterhead.your_reference_y)*mm
+            )
+        ptext = "Our reference: " + self.letter.our_reference
+        p = Paragraph(ptext, STYLES['ReturnAddress'])
+        p.wrapOn(
+                canvas,
+                doc.width/3.0,
+                doc.height
+            )
+        p.drawOn(
+                canvas,
+                self.letterhead.our_reference_x*mm,
+                (257-self.letterhead.our_reference_y)*mm
+            )
+
         # Recipient address block
         ptext = "<font size=12>" + "<br/>".join(
                 [
-                    self.letter_text.addressee,
-                    self.letter_text.address_1, 
-                    self.letter_text.address_2, 
-                    self.letter_text.address_3, 
-                    self.letter_text.town, 
-                    self.letter_text.postcode, 
+                    (" ").join([
+                        self.letter.addressee_title,
+                        self.letter.addressee_first_name,
+                        self.letter.addressee_second_name,
+                    ]),
+                    self.letter.address_1, 
+                    self.letter.address_2, 
+                    self.letter.address_3, 
+                    self.letter.town, 
+                    self.letter.postcode, 
                     "</font>",
                 ]
             )
@@ -126,9 +159,14 @@ class LetterCanvas(object):
         p.drawOn(canvas, 15*mm, 197*mm)
 
         # Footer
-        footer = Paragraph(self.letter_text.barcode, STYLES['Normal'])
+        # See http://stackoverflow.com/a/13132282
+        qr_code = QrCodeWidget(self.letter.barcode)
+        drawing = Drawing(45, 45)
+        drawing.add(qr_code)
+        renderPDF.draw(drawing, canvas, 1, 1)
+        footer = Paragraph(self.letter.barcode, STYLES['Normal'])
         w, h = footer.wrap(doc.width, doc.bottomMargin)
-        footer.drawOn(canvas, doc.leftMargin, h)
+        footer.drawOn(canvas, doc.leftMargin+50, h)
 
         # Release the canvas
         canvas.restoreState()
@@ -146,9 +184,13 @@ class LetterCanvas(object):
         header.drawOn(canvas, doc.leftMargin, doc.height + doc.topMargin + doc.bottomMargin - h*mm)
 
         # Footer
-        footer = Paragraph(self.letter_text.barcode, STYLES['Normal'])
+        qr_code = QrCodeWidget(self.letter.barcode)
+        drawing = Drawing(45, 45)
+        drawing.add(qr_code)
+        renderPDF.draw(drawing, canvas, 1, 1)
+        footer = Paragraph(self.letter.barcode, STYLES['Normal'])
         w, h = footer.wrap(doc.width, doc.bottomMargin)
-        footer.drawOn(canvas, doc.leftMargin, h)
+        footer.drawOn(canvas, doc.leftMargin+50, h)
 
         # Release the canvas
         canvas.restoreState()
@@ -159,21 +201,25 @@ class LetterCanvas(object):
         """
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for full list of functionality.
-        self.elements.append(Paragraph(self.letter_text.date_sent.strftime("%d %B %Y"), STYLES['DateLine']))
-        self.elements.append(Paragraph(self.letter_text.letter_title, STYLES['LetterTitle']))
-        if self.letter_text.addressee_is_organisation:
+        self.elements.append(Paragraph(self.letter.date_sent.strftime("%d %B %Y"), STYLES['DateLine']))
+        self.elements.append(Paragraph(self.letter.letter_title, STYLES['LetterTitle']))
+        if self.letter.addressee_organisation and not self.letter.addressee_title:
             salutation = "Dear sir or madam,"
             sign_off = "Yours faithfully,"
         else:
-            salutation = "Dear " + self.letter_text.addressee + ","
+            salutation = (" ").join([
+                self.letter.addressee_title,
+                self.letter.addressee_second_name,
+            ])
+            salutation += ","
             sign_off = "Yours sincerely,"
         self.elements.append(Paragraph(salutation, STYLES['Salutation']))
         flowable_text = ProcessedText(
                 self.content_template,
-                self.letter_text
+                self.letter
             ).process().decode('utf-8')
         for i, par in enumerate(flowable_text.split('\n')):
             self.elements.append(Paragraph(par, STYLES['LetterBody']))
         self.elements.append(Paragraph(sign_off, STYLES['Salutation']))
-        self.elements.append(Paragraph(self.letter_text.sender_name, STYLES['Signature']))
-        self.elements.append(Paragraph(self.letter_text.sender_title, STYLES['SignatoryTitle']))
+        self.elements.append(Paragraph(self.letter.sender_name, STYLES['Signature']))
+        self.elements.append(Paragraph(self.letter.sender_title, STYLES['SignatoryTitle']))

@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from rest_framework import renderers
 from rest_framework.decorators import api_view, detail_route
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet
@@ -9,7 +10,7 @@ from letters.letter_builder import LetterCanvas
 from letters.models import (
     ContentTemplate,
     Letterhead,
-    LetterText,
+    Letter,
     LetterVariable,
     Logo
 )
@@ -17,7 +18,7 @@ from letters.renderers import PDFRenderer
 from letters.serializers import (
     ContentTemplateSerializer,
     LetterheadSerializer,
-    LetterTextSerializer,
+    LetterSerializer,
     LetterVariableSerializer,
     LogoSerializer
 )
@@ -48,20 +49,20 @@ class LetterheadViewSet(ModelViewSet):
     serializer_class = LetterheadSerializer
 
 
-class LetterTextViewSet(ModelViewSet):
+class LetterViewSet(ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     Append 'letter' to the URL to retrieve the instance as a formatted
     PDF letter.
     """
-    queryset = LetterText.objects.all()
-    serializer_class = LetterTextSerializer
+    queryset = Letter.objects.all()
+    serializer_class = LetterSerializer
 
     @detail_route(renderer_classes=[PDFRenderer])
     def letter(self, request, *args, **kwargs):
         """
-        Takes a LetterText instance and a django request and returns
+        Takes a Letter instance and a django request and returns
         a PDF letter as the request response.
         """
         letter = self.get_object()

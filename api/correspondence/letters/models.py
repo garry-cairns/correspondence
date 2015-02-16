@@ -31,8 +31,14 @@ class ContentTemplate(Model):
     name = CharField(max_length=100)
     text = TextField()
     created = DateTimeField(auto_now_add=True)
-    start_time = DateTimeField(auto_now_add=True)
-    end_time = DateTimeField(auto_now_add=True)
+    start_time = DateTimeField(
+            blank=True,
+            null=True
+        )
+    end_time = DateTimeField(
+            blank=True,
+            null=True
+        )
 
     def __str__(self):
         return self.name + ' ' + self.start_time.strftime("%d %B %Y")
@@ -42,6 +48,10 @@ class Letterhead(Model):
     """Letterhead object. Attributes:
     * :attr: `~letters.models.Letterhead.name` - letterhead name
     * :attr: `~letters.models.Letterhead.font` - letterhead main font
+    * :attr: `~letters.models.Letterhead.left_margin` - left margin mm
+    * :attr: `~letters.models.Letterhead.top_margin` - top margin mm
+    * :attr: `~letters.models.Letterhead.right_margin` - right margin mm
+    * :attr: `~letters.models.Letterhead.bottom_margin` - bottom margin mm
     * :attr: `~letters.models.Letterhead.logo` - link to letterhead logo
     * :attr: `~letters.models.Letterhead.logo_x` - logo x co-ordinate
     * :attr: `~letters.models.Letterhead.logo_y` - logo y co-ordinate
@@ -75,6 +85,10 @@ class Letterhead(Model):
             default=HELVETICA,
             help_text="Choices are restricted to those available as standard in PDFs. This is essential to our archiving requirements.",
         )
+    left_margin = IntegerField(help_text="Distance in mm from left edge of page to left edge of body text")
+    top_margin = IntegerField(help_text="Distance in mm from top edge of page to top edge of body text")
+    right_margin = IntegerField(help_text="Distance in mm from right edge of page to right edge of body text")
+    bottom_margin = IntegerField(help_text="Distance in mm from bottom edge of page to bottom edge of body text")
     logo = ForeignKey("Logo")
     logo_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of logo")
     logo_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of logo")
@@ -83,46 +97,89 @@ class Letterhead(Model):
     return_contacts = TextField()
     return_contacts_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of return contacts")
     return_contacts_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of return contacts")
-    # Reference blocks handle position only, values provided with LetterText to minimize object creation events
+    # Reference blocks handle position only, values provided with Letter to minimize object creation events
     your_reference_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of recipient's reference")
     your_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of recipient's reference")
     our_reference_x = IntegerField(help_text="Distance in mm from left edge of page to left edge of our reference")
     our_reference_y = IntegerField(help_text="Distance in mm from top edge of page to top edge of our reference")
     created = DateTimeField(auto_now_add=True)
-    start_time = DateTimeField(auto_now_add=True)
-    end_time = DateTimeField(auto_now_add=True)
+    start_time = DateTimeField(
+            blank=True,
+            null=True
+        )
+    end_time = DateTimeField(
+            blank=True,
+            null=True
+        )
 
     def __str__(self):
         return self.name + ' ' + self.start_time.strftime("%d %B %Y")
 
 
-class LetterText(Model):
-    """LetterText object. Attributes:
-    * :attr: `~letters.models.LetterText.letterhead` - link to current
+class Letter(Model):
+    """Letter object. Attributes:
+    * :attr: `~letters.models.Letter.letterhead` - link to current
       letterhead
-    * :attr: `~letters.models.LetterText.content_template` - link to
+    * :attr: `~letters.models.Letter.content_template` - link to
       relevant content template
-    * :attr: `~letters.models.LetterText.date_sent` - date on which we
+    * :attr: `~letters.models.Letter.date_sent` - date on which we
       issued the letter
-    * :attr: `~letters.models.LetterText.addressee` - person or
-      organisation to whom the letter was addressed
-    * :attr: `~letters.models.LetterText.address_1` - first line address
-    * :attr: `~letters.models.LetterText.address_2` - second line address
-    * :attr: `~letters.models.LetterText.address_3` - third line address
-    * :attr: `~letters.models.LetterText.address_4` - fourth line address
-    * :attr: `~letters.models.LetterText.postcode` - postcode
-    * :attr: `~letters.models.LetterText.our_reference` - our reference
+    * :attr: `~letters.models.Letter.addressee_title` - title of the person
+      to whom the letter was addressed, blank if addressee is organisation
+    * :attr: `~letters.models.Letter.addressee_first_name` - first name of 
+      the person to whom letter addressed, blank if addressee is org
+    * :attr: `~letters.models.Letter.addressee_second_name` - second name 
+      of the person to whom letter addressed, blank if addressee is org
+    * :attr: `~letters.models.Letter.addressee_organisation` - name 
+      of the organisation to whom letter addressed, blank if none
+    * :attr: `~letters.models.Letter.address_1` - first line address
+    * :attr: `~letters.models.Letter.address_2` - second line address
+    * :attr: `~letters.models.Letter.address_3` - third line address
+    * :attr: `~letters.models.Letter.address_4` - fourth line address
+    * :attr: `~letters.models.Letter.postcode` - postcode
+    * :attr: `~letters.models.Letter.our_reference` - our reference
       number, if applicable
-    * :attr: `~letters.models.LetterText.your_reference` - the addressee's
+    * :attr: `~letters.models.Letter.your_reference` - the addressee's
       reference number, if applicable
-    * :attr: `~letters.models.LetterText.barcode` - the barcode string
+    * :attr: `~letters.models.Letter.barcode` - the barcode string
       from which we will generate the QR code
-    * :attr: `~letters.models.LetterText.additional_data` - client-provided
+    * :attr: `~letters.models.Letter.additional_data` - client-provided
       dictionary with additional variables and their values
     """
+    DR = 1
+    MISS = 2
+    MR = 3
+    MRS = 4
+    MS = 5
+    TITLE_CHOICES = (
+            (DR, 'Dr'),
+            (MISS, 'Miss'),
+            (MR, 'Mr'),
+            (MRS, 'Mrs'),
+            (MS, 'Ms'),
+        )
     letterhead = ForeignKey("Letterhead")
     content_template = ForeignKey("ContentTemplate")
-    addressee = CharField(max_length=100)
+    addressee_title = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    addressee_first_name = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    addressee_second_name = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
+    addressee_organisation = CharField(
+            max_length=100,
+            blank=True,
+            null=True,
+        )
     address_1 = CharField(max_length=100)
     address_2 = CharField(
             max_length=100,
@@ -148,7 +205,6 @@ class LetterText(Model):
         )
     date_sent = DateTimeField(auto_now_add=True)
     letter_title = CharField(max_length=100)
-    addressee_is_organisation = BooleanField(default=False)
     addressee_is_representative = BooleanField(default=False)
     sender_name = CharField(max_length=100)
     sender_title = CharField(max_length=100)
@@ -164,7 +220,10 @@ class LetterText(Model):
         dictionary for processing by the letter_processor.
         """
         return {
-                'addressee': self.addressee,
+                'addressee_title': self.addressee_title,
+                'addressee_first_name': self.addressee_first_name,
+                'addressee_second_name': self.addressee_second_name,
+                'addressee_organisation': self.addressee_organisation,
                 'address_1': self.address_1,
                 'address_2': self.address_2,
                 'address_3': self.address_3,
@@ -172,7 +231,6 @@ class LetterText(Model):
                 'postcode': self.postcode,
                 'our_reference': self.our_reference,
                 'your_reference': self.your_reference,
-                'addressee_is_organisation': self.addressee_is_organisation,
                 'addressee_is_representative': self.addressee_is_representative,
                 'sender_name': self.sender_name,
                 'sender_title': self.sender_title,
@@ -184,19 +242,13 @@ class LetterText(Model):
 
 class LetterVariable(Model):
     """LetterVariable object. Attributes:
+    * :attr: `~letters.models.LetterVariable.content_template` - templates
+      to which a variable is attached
     * :attr: `~letters.models.LetterVariable.variable_name` - variable
-      available in a given template
-    * :attr: `~letters.models.LetterVariable.variable_value` - variables
       available in a given template
     """
     content_template = ManyToManyField("ContentTemplate")
     variable_name = CharField(max_length=100)
-    variable_value = CharField(
-            max_length=100,
-            blank=True,
-            null=True,
-            default="",
-        )
 
     def __str__(self):
         return self.variable_name
@@ -216,8 +268,14 @@ class Logo(Model):
     name = CharField(max_length=100)
     image = ImageField()
     created = DateTimeField(auto_now_add=True)
-    start_time = DateTimeField(auto_now_add=True)
-    end_time = DateTimeField(auto_now_add=True)
+    start_time = DateTimeField(
+            blank=True,
+            null=True
+        )
+    end_time = DateTimeField(
+            blank=True,
+            null=True
+        )
 
     def __str__(self):
         return self.name + ' ' + self.start_time.strftime("%d %B %Y")

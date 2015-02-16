@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from letters.views import (
     ContentTemplateViewSet,
     LetterheadViewSet,
-    LetterTextViewSet,
+    LetterViewSet,
     LetterVariableViewSet,
     LogoViewSet
 )
@@ -15,7 +15,7 @@ from letters.views import (
 router = DefaultRouter()
 router.register(r'content-templates', ContentTemplateViewSet)
 router.register(r'letterheads', LetterheadViewSet)
-router.register(r'letter-texts', LetterTextViewSet)
+router.register(r'letters', LetterViewSet)
 router.register(r'letter-variables', LetterVariableViewSet)
 router.register(r'logos', LogoViewSet)
 

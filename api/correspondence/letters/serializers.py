@@ -4,7 +4,7 @@ from rest_framework.serializers import HyperlinkedModelSerializer
 from letters.models import (
     ContentTemplate,
     Letterhead,
-    LetterText,
+    Letter,
     LetterVariable,
     Logo
 )
@@ -30,6 +30,10 @@ class LetterheadSerializer(HyperlinkedModelSerializer):
                 'url',
                 'name',
                 'font',
+                'left_margin',
+                'top_margin',
+                'right_margin',
+                'bottom_margin',
                 'logo',
                 'logo_x',
                 'logo_y',
@@ -48,14 +52,17 @@ class LetterheadSerializer(HyperlinkedModelSerializer):
             )
 
 
-class LetterTextSerializer(HyperlinkedModelSerializer):
+class LetterSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = LetterText
+        model = Letter
         fields =  (
                 'url',
                 'letterhead',
                 'content_template',
-                'addressee',
+                'addressee_title',
+                'addressee_first_name',
+                'addressee_second_name',
+                'addressee_organisation',
                 'address_1',
                 'address_2',
                 'address_3',
@@ -65,7 +72,6 @@ class LetterTextSerializer(HyperlinkedModelSerializer):
                 'your_reference',
                 'date_sent',
                 'letter_title',
-                'addressee_is_organisation',
                 'addressee_is_representative',
                 'sender_name',
                 'sender_title',
@@ -81,7 +87,6 @@ class LetterVariableSerializer(HyperlinkedModelSerializer):
                 'url',
                 'content_template',
                 'variable_name',
-                'variable_value',
             )
 
 
