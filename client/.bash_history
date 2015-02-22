@@ -1,0 +1,2 @@
+yo ember
+ls
