@@ -26,10 +26,12 @@ nosetests.xml
 *.swo
 
 # npm
-node_modules/
+client/code/node_modules/
+client/code/.npm/
 
 # Campass
-.sass-cache
+client/code/.sass-cache
 
 # Site content
 media/
+
