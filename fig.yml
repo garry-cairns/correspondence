@@ -11,7 +11,7 @@ api:
 client:
     build: client
     volumes:
-        - client/code:/home/ember/
+        - client/correspondence:/home/ember/
 webserver:
     build: webserver
     ports:
