@@ -1,0 +1,9 @@
+<h1>LetterVariables</h1>
+
+<ul>
+ {{#each model}}
+ <li>{{#link-to 'lettervariable' this}}{{this.id}}{{/link-to}}</li>
+  {{/each}}
+</ul>
+
+{{outlet}}

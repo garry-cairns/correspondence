@@ -32,6 +32,7 @@ class Common(Configuration):
     )
     THIRD_PARTY_APPS = (
         'rest_framework',  # REST APIs
+        'rest_framework_ember',
     )
 
     # Apps specific for this project go here.
@@ -254,6 +255,17 @@ class Common(Configuration):
     REST_FRAMEWORK = {
         'PAGINATE_BY': 10,                 # Default to 10
         'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
-        'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
+        'MAX_PAGINATE_BY': 100,             # Maximum limit allowed when using `?page_size=xxx`.
+        'DEFAULT_PAGINATION_SERIALIZER_CLASS':
+            'rest_framework_ember.pagination.PaginationSerializer',
+        'DEFAULT_PARSER_CLASSES': (
+            'rest_framework_ember.parsers.JSONParser',
+            'rest_framework.parsers.FormParser',
+            'rest_framework.parsers.MultiPartParser'
+        ),
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework_ember.renderers.JSONRenderer',
+            'rest_framework.renderers.BrowsableAPIRenderer',
+        ),
     }
     # END REST FRAMEWORK CONFIGURATION

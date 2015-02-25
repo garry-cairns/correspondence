@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework import renderers
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from rest_framework_ember.renderers import JSONRenderer as EmberJSONRenderer
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet
@@ -58,7 +59,7 @@ class LetterViewSet(ModelViewSet):
     """
     queryset = Letter.objects.all()
     serializer_class = LetterSerializer
-    renderer_classes = [PDFRenderer, JSONRenderer, BrowsableAPIRenderer]
+    renderer_classes = [EmberJSONRenderer, BrowsableAPIRenderer, PDFRenderer]
 
     @detail_route(renderer_classes=[PDFRenderer])
     def letter(self, request, *args, **kwargs):

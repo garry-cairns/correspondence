@@ -14,15 +14,18 @@ RUN ["apt-get", "-y", "install", "python3-dev", "python3-imaging", "python3-pip"
 # prepare postgreSQL support
 RUN ["apt-get", "-y", "build-dep", "python3-psycopg2"]
 
-# create a python user to run our programs
-RUN ["groupadd", "-r", "python"]
-RUN ["useradd", "-r", "-g", "python", "python"]
+# move into our working directory
+# ADD must be after chown see http://stackoverflow.com/a/26145444/1281947
+RUN ["groupadd", "python"]
+RUN ["useradd", "python", "-s", "/bin/bash", "-m", "-g", "python", "-G", "python"]
+ENV HOME /home/python
 WORKDIR /home/python
+RUN ["chown", "-R", "python:python", "/home/python"]
 ADD ./ /home/python
 
 # manage requirements
-ENV REQUIREMENTS_REFRESHED_AT 2015-02-13
+ENV REQUIREMENTS_REFRESHED_AT 2015-02-25
 RUN ["pip3", "install", "-r", "requirements.txt"]
 
 # uncomment the line below to use container as a non-root user
-# USER python:python
+USER python:python

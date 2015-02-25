@@ -1,0 +1,9 @@
+<h1>Letterheads</h1>
+
+<ul>
+ {{#each model}}
+ <li>{{#link-to 'letterhead' this}}{{this.id}}{{/link-to}}</li>
+  {{/each}}
+</ul>
+
+{{outlet}}
