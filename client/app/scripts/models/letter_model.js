@@ -11,17 +11,3 @@ Ember.Letter.reopen({
   }.property()
 });
 
-// delete below here if you do not want fixtures
-Ember.Letter.FIXTURES = [
-  
-  {
-    id: 0,
-    
-  },
-  
-  {
-    id: 1,
-    
-  }
-  
-];
