@@ -26,13 +26,14 @@ nosetests.xml
 *.swo
 
 # npm
-client/node_modules/
-client/.npm/
-client/.tmp/
-client/temp/
-client/dist/
-client/app/bower_components
-client/test/bower_components
+webserver/node_modules/
+webserver/.npm/
+webserver/.tmp/
+webserver/temp/
+webserver/build/
+webserver/dist/
+webserver/bower_components
+webserver/test/bower_components
 
 # Compass
 client/.sass-cache
