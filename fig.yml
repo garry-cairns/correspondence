@@ -8,10 +8,6 @@ api:
         - api/correspondence:/home/python/
     links:
         - database
-client:
-    build: client
-    volumes:
-        - client/:/home/ember/
 webserver:
     build: webserver
     ports:
@@ -19,4 +15,3 @@ webserver:
         - "443:443"
     links:
         - api
-        - client

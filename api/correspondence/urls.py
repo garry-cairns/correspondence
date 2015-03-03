@@ -21,5 +21,5 @@ router.register(r'logos', LogoViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

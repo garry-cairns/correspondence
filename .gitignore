@@ -34,9 +34,11 @@ client/dist/
 client/app/bower_components
 client/test/bower_components
 
-# Campass
+# Compass
 client/.sass-cache
 
 # Site content
 media/
 
+# Docker leftovers
+.bash_history
