@@ -1,3 +1,5 @@
+/* global app:true */
+/* exported app */
 'use strict';
 
 /**
@@ -23,9 +25,17 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
+      .when('/design', {
+        templateUrl: 'views/design.html',
+        controller: 'DesignCtrl'
+      })
+      .when('/design', {
+        templateUrl: 'views/design.html',
+        controller: 'DesignCtrl'
+      })
+      .when('/send', {
+        templateUrl: 'views/send.html',
+        controller: 'SendCtrl'
       })
       .otherwise({
         redirectTo: '/'
