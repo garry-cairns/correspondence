@@ -3,7 +3,7 @@
 describe 'Controller: AppCtrl', ->
 
   # load the controller's module
-  beforeEach module 'webserverApp'
+  beforeEach module 'correspondenceApp'
 
   AppCtrl = {}
   scope = {}

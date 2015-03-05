@@ -1,1 +1,8 @@
-<p>This is the _header view.</p>
+<div class="header">
+    <ul class="nav nav-pills pull-right">
+        <li ng-repeat="item in App.menu" ng-class="{'active': App.location.path() === item.href}">
+        <a ng-href = "#{{item.href}}">{{item.title}}</a>
+        </li>
+    </ul>
+    <h3 class="text-muted">{{ App.sitetitle }}</h3>
+</div>
