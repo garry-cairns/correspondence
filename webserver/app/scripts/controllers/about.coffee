@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name webserverApp.controller:AboutCtrl
+ # @name correspondenceApp.controller:AboutCtrl
  # @description
  # # AboutCtrl
- # Controller of the webserverApp
+ # Controller of the correspondenceApp
 ###
-angular.module 'webserverApp'
+angular.module 'correspondenceApp'
   .controller 'AboutCtrl', ($scope) ->
     $scope.awesomeThings = [
       'HTML5 Boilerplate'

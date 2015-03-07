@@ -3,7 +3,7 @@
 describe 'Service: Config', ->
 
   # load the service's module
-  beforeEach module 'webserverApp'
+  beforeEach module 'correspondenceApp'
 
   # instantiate service
   Config = {}

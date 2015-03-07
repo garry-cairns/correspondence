@@ -21,8 +21,8 @@ angular.module('correspondenceApp').value('Config', Config =
     features: [
         title: 'Design'
         body: 'Design letter templates and layouts'
-        image: 'http://goo.gl/g6L099'
-        ,
+        image: 'http://goo.gl/9M00hx'
+    ,
         title: 'Send'
         body: 'Send letters'
         image: 'http://goo.gl/GpxBAx'
@@ -36,9 +36,9 @@ angular.module('correspondenceApp').value('Config', Config =
         footer: 'views/_footer.html'
     menu: [
         title: 'Home', href: '/'
-        ,
+    ,
         title: 'Design', href: '/design'
-        ,
+    ,
         title: 'Send', href: '/send'
     ]
 )
