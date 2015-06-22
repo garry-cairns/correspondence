@@ -23,6 +23,7 @@ WORKDIR /home/python
 RUN ["chown", "-R", "python:python", "/home/python"]
 # add requirements.txt first so dependencies get cached
 ADD ./requirements.txt requirements.txt
+ADD ./requirements requirements
 
 # manage requirements
 ENV REQUIREMENTS_REFRESHED_AT 2015-02-25
