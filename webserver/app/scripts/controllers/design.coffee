@@ -8,7 +8,7 @@
  # Controller of the correspondenceApp
 ###
 angular.module 'correspondenceApp'
-  .controller 'AboutCtrl', ($scope) ->
+  .controller 'DesignCtrl', ($scope) ->
     $scope.awesomeThings = [
       'HTML5 Boilerplate'
       'AngularJS'

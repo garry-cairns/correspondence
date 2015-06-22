@@ -25,8 +25,11 @@ angular
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
       .when '/design',
-        templateUrl: 'views/about.html'
-        controller: 'AboutCtrl'
+        templateUrl: 'views/design.html'
+        controller: 'DesignCtrl'
+      .when '/send',
+        templateUrl: 'views/send.html'
+        controller: 'SendCtrl'
       .otherwise
         redirectTo: '/'
 

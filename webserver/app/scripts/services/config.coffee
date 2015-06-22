@@ -12,7 +12,7 @@ angular.module('correspondenceApp').value('Config', Config =
     sitetitle: 'Correspondence'
     sitedesc: 'A web service for mail merging'
     sitecopy: '2015 copyright'
-    version: '0.1.0'
+    version: '0.1.1'
     debug: true
     feature:
         title: 'Correspondence'
