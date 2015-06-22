@@ -17,15 +17,15 @@ angular.module('correspondenceApp').value('Config', Config =
     feature:
         title: 'Correspondence'
         body: 'A web service for mail merging'
-        image: 'http://goo.gl/YHBZjc'
+        image: 'http://placehold.it/80x80'
     features: [
         title: 'Design'
         body: 'Design letter templates and layouts'
-        image: 'http://goo.gl/9M00hx'
+        image: 'http://placehold.it/80x80'
     ,
         title: 'Send'
         body: 'Send letters'
-        image: 'http://goo.gl/GpxBAx'
+        image: 'http://placehold.it/80x80'
     ]
     session:
         authorized: false
