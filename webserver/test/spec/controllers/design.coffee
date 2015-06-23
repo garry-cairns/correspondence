@@ -1,17 +1,17 @@
 'use strict'
 
-describe 'Controller: AboutCtrl', ->
+describe 'Controller: DesignCtrl', ->
 
   # load the controller's module
   beforeEach module 'correspondenceApp'
 
-  AboutCtrl = {}
+  DesignCtrl = {}
   scope = {}
 
   # Initialize the controller and a mock scope
   beforeEach inject ($controller, $rootScope) ->
     scope = $rootScope.$new()
-    AboutCtrl = $controller 'AboutCtrl', {
+    DesignCtrl = $controller 'DesignCtrl', {
       $scope: scope
     }
 
