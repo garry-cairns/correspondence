@@ -31,7 +31,10 @@ module.exports = (config) ->
       # endbower
       'app/scripts/**/*.coffee'
       'test/mock/**/*.coffee'
-      'test/spec/**/*.coffee'
+      'test/spec/controllers/main.coffee'
+      'test/spec/controllers/design.coffee'
+      'test/spec/controllers/send.coffee'
+      'test/spec/services/*.coffee'
     ],
 
     # list of files / patterns to exclude
@@ -76,6 +79,6 @@ module.exports = (config) ->
     preprocessors: '**/*.coffee': ['coffee']
 
     # Uncomment the following lines if you are using grunt's server to run the tests
-    # proxies: '/': 'http://localhost:9000/'
+    proxies: '/': 'http://localhost:9000/'
     # URL root prevent conflicts with the site root
-    # urlRoot: '_karma_'
+    urlRoot: '_karma_'
