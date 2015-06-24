@@ -17,7 +17,6 @@ from reportlab.platypus import (
 from .letter_design import STYLES
 from .letter_processor import ProcessedText
 from .models import Letterhead, ContentTemplate, Letter
-from random import random
 
 
 class NumberedCanvas(canvas.Canvas):
