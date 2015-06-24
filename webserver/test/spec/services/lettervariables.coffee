@@ -14,7 +14,7 @@ describe 'Service: LetterVariables', ->
     httpBackend = _$httpBackend_
 
   it 'should GET a list of lettervariables', () ->
-    httpBackend.expectGET('api/lettervariable').respond(mockData)
+    httpBackend.expectGET('api/letter-variables').respond(mockData)
     lettervariables = null
     promise = LetterVariables.query().$promise
     promise.then((data) ->

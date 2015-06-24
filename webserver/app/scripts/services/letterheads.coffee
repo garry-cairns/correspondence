@@ -10,7 +10,7 @@
 
 angular.module 'correspondenceApp'
   .factory 'Letterheads', ($resource) ->
-    return $resource('api/letterhead/:id', { id: '@_id' }, {
+    return $resource('api/letterheads/:id', { id: '@_id' }, {
             'query': method: 'GET', isArray: true
             'update': method: 'PUT'
       })

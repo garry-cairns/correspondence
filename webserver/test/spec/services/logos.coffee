@@ -14,7 +14,7 @@ describe 'Service: Logos', ->
     httpBackend = _$httpBackend_
 
   it 'should GET a list of logos', () ->
-    httpBackend.expectGET('api/logo').respond(mockData)
+    httpBackend.expectGET('api/logos').respond(mockData)
     logos = null
     promise = Logos.query().$promise
     promise.then((data) ->

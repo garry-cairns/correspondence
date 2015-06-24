@@ -14,7 +14,7 @@ describe 'Service: Letterheads', ->
     httpBackend = _$httpBackend_
 
   it 'should GET a list of letterheads', () ->
-    httpBackend.expectGET('api/letterhead').respond(mockData)
+    httpBackend.expectGET('api/letterheads').respond(mockData)
     letterheads = null
     promise = Letterheads.query().$promise
     promise.then((data) ->

@@ -14,7 +14,7 @@ describe 'Service: ContentTemplates', () ->
     httpBackend = _$httpBackend_
 
   it 'should GET a list of content templates', () ->
-    httpBackend.expectGET('api/contenttemplate').respond(mockData)
+    httpBackend.expectGET('api/content-templates').respond(mockData)
     contenttemplates = null
     promise = ContentTemplates.query().$promise
     promise.then((data) ->

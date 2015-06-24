@@ -1,1 +1,16 @@
-<p>This is the design view.</p>
+<div id="logos">
+    <button class="btn btn-default pull-right"
+            ng-click="add()">Add new</button>
+    <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li class="active">Design</li>
+    </ol>
+    <ul class="logos list-unstyled">
+        <li ng-repeat="logo in logos">
+            <div class="logo" data-id="{{logo._id}}">
+                <header ng-include="'views/logo-header.html'"></header>
+                <section ng-bind-html="logo.body"></section>
+            </div>
+        </li>
+    </ul>
+</div>

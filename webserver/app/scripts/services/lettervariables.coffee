@@ -10,7 +10,7 @@
 
 angular.module 'correspondenceApp'
   .factory 'LetterVariables', ($resource) ->
-    return $resource('api/lettervariable/:id', { id: '@_id' }, {
+    return $resource('api/letter-variables/:id', { id: '@_id' }, {
             'query': method: 'GET', isArray: true
             'update': method: 'PUT'
       })
