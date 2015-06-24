@@ -7,8 +7,19 @@ describe 'Service: Logos', ->
 
   # instantiate service
   Logos = {}
-  beforeEach inject (_Logos_) ->
+  httpBackend = null
+  mockData = [{_id: 1}, {_id: 2}, {_id: 3}]
+  beforeEach inject (_$httpBackend_, _Logos_) ->
     Logos = _Logos_
+    httpBackend = _$httpBackend_
 
-  it 'should do something', ->
-    expect(!!Logos).toBe true
+  it 'should GET a list of logos', () ->
+    httpBackend.expectGET('api/logo').respond(mockData)
+    logos = null
+    promise = Logos.query().$promise
+    promise.then((data) ->
+      logos = data
+    )
+    expect(logos).toBeNull()
+    httpBackend.flush()
+    expect(logos.length).toEqual(3)

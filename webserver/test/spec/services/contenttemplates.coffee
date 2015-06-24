@@ -5,11 +5,9 @@ describe 'Service: ContentTemplates', () ->
   # load the service's module
   beforeEach module 'correspondenceApp'
 
-  ContentTemplates = {}
+  # instantiate service
   httpBackend = null
   mockData = [{_id: 1}, {_id: 2}, {_id: 3}]
-
-  # instantiate service
   ContentTemplates = {}
   beforeEach inject (_$httpBackend_, _ContentTemplates_) ->
     ContentTemplates = _ContentTemplates_
