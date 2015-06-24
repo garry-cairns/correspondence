@@ -7,6 +7,10 @@
  # # ContentTemplates
  # Service in the correspondenceApp.
 ###
+
 angular.module 'correspondenceApp'
-  .service 'ContentTemplates', ->
-    # AngularJS will instantiate a singleton by calling "new" on this function
+  .factory 'ContentTemplates', ($resource) ->
+    return $resource('api/contenttemplate/:id', { id: '@_id' }, {
+            'query': method: 'GET', isArray: true
+            'update': method: 'PUT'
+      })

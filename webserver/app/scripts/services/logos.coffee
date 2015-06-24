@@ -7,6 +7,10 @@
  # # Logos
  # Service in the correspondenceApp.
 ###
+
 angular.module 'correspondenceApp'
-  .service 'Logos', ->
-    # AngularJS will instantiate a singleton by calling "new" on this function
+  .factory 'Logos', ($resource) ->
+    return $resource('api/logo/:id', { id: '@_id' }, {
+            'query': method: 'GET', isArray: true
+            'update': method: 'PUT'
+      })

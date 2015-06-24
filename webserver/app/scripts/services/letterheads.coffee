@@ -7,6 +7,10 @@
  # # Letterheads
  # Service in the correspondenceApp.
 ###
+
 angular.module 'correspondenceApp'
-  .service 'Letterheads', ->
-    # AngularJS will instantiate a singleton by calling "new" on this function
+  .factory 'Letterheads', ($resource) ->
+    return $resource('api/letterhead/:id', { id: '@_id' }, {
+            'query': method: 'GET', isArray: true
+            'update': method: 'PUT'
+      })

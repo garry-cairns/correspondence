@@ -1,19 +1,21 @@
 'use strict'
 
-describe 'Controller: DesignCtrl', ->
+describe 'Controller: DesignCtrl', () ->
 
   # load the controller's module
   beforeEach module 'correspondenceApp'
 
   DesignCtrl = {}
   scope = {}
+  location = {}
 
   # Initialize the controller and a mock scope
-  beforeEach inject ($controller, $rootScope) ->
+  beforeEach inject ($controller, $rootScope, $location) ->
     scope = $rootScope.$new()
     DesignCtrl = $controller 'DesignCtrl', {
       $scope: scope
+      $location: location
     }
 
-  it 'should attach a list of awesomeThings to the scope', ->
-    expect(scope.awesomeThings.length).toBe 3
+  it 'should be named "Design"', () ->
+    expect(scope.name).toBe('Design')

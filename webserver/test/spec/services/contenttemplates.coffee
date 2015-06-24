@@ -1,14 +1,27 @@
 'use strict'
 
-describe 'Service: ContentTemplates', ->
+describe 'Service: ContentTemplates', () ->
 
   # load the service's module
   beforeEach module 'correspondenceApp'
 
+  ContentTemplates = {}
+  httpBackend = null
+  mockData = [{_id: 1}, {_id: 2}, {_id: 3}]
+
   # instantiate service
   ContentTemplates = {}
-  beforeEach inject (_ContentTemplates_) ->
+  beforeEach inject (_$httpBackend_, _ContentTemplates_) ->
     ContentTemplates = _ContentTemplates_
+    httpBackend = _$httpBackend_
 
-  it 'should do something', ->
-    expect(!!ContentTemplates).toBe true
+  it 'should GET a list of content templates', () ->
+    httpBackend.expectGET('api/contenttemplate').respond(mockData)
+    contenttemplates = null
+    promise = ContentTemplates.query().$promise
+    promise.then((data) ->
+      contenttemplates = data
+    )
+    expect(contenttemplates).toBeNull()
+    httpBackend.flush()
+    expect(contenttemplates.length).toEqual(3)
