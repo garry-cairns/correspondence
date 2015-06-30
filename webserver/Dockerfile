@@ -17,13 +17,5 @@ ADD ./site.conf /etc/nginx/sites-available/correspondence
 RUN ["ln", "-s", "/etc/nginx/sites-available/correspondence", "/etc/nginx/sites-enabled/correspondence"]
 RUN ["rm", "-rf", "/etc/nginx/sites-available/default"]
 
-# add application code as unprivileged user
-RUN ["groupadd", "angular"]
-RUN ["useradd", "angular", "-s", "/bin/bash", "-m", "-g", "angular", "-G", "angular"]
-ENV HOME /home/angular
-WORKDIR /home/angular
-RUN ["chown", "-R", "angular:angular", "/home/angular"]
-ADD ./dist/ /home/angular
-
 #start the server
 CMD ["nginx", "-g", "daemon off;"]

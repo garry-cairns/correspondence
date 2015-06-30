@@ -1,17 +1,24 @@
 database:
     build: database
+
 api:
     build: api
     # command: /usr/bin/python3.4 manage.py runserver 0.0.0.0:8000 # dev setting
     command: gunicorn -b 0.0.0.0:8000 wsgi:application # production setting
     volumes:
-        - api/correspondence:/home/python/
+      - api/correspondence:/home/python/
     links:
-        - database
+      - database
+
+client:
+    build: client
+    volumes:
+      - client/:/home/angular/
+
 webserver:
     build: webserver
     ports:
-        - "80:80"
-        - "443:443"
+      - "80:80"
+      - "443:443"
     links:
-        - api
+      - api

@@ -26,14 +26,15 @@ nosetests.xml
 *.swo
 
 # npm
-webserver/node_modules/
-webserver/.npm/
-webserver/.tmp/
-webserver/temp/
-webserver/build/
-webserver/dist/
-webserver/bower_components
-webserver/test/bower_components
+client/node_modules/
+client/.cache/*
+client/.npm/
+client/.tmp/
+client/temp/
+client/build/
+client/dist/
+client/bower_components
+client/test/bower_components
 
 # Compass
 client/.sass-cache
@@ -43,3 +44,4 @@ media/
 
 # Docker leftovers
 .bash_history
+/webserver/dist/
