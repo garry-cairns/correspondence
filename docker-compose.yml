@@ -10,11 +10,6 @@ api:
     links:
       - database
 
-client:
-    build: client
-    volumes:
-      - client/:/home/angular/
-
 webserver:
     build: webserver
     ports:
@@ -22,3 +17,5 @@ webserver:
       - "443:443"
     links:
       - api
+    volumes_from:
+      - client

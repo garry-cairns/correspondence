@@ -27,15 +27,7 @@ The API is the meat of this project. It is expected you will want to integrate w
 
 ## Demo client
 
-The webserver directory contains a demo client app generated with [yo angular generator](https://github.com/yeoman/generator-angular) version 0.11.1.
-
-### Building and developing the demo client
-
-Run `grunt` for building and `grunt serve` for preview.
-
-Testing
-
-Running `grunt test` will run the unit tests with karma.
+The webserver directory contains a demo client app generated with [yo angular generator](https://github.com/yeoman/generator-angular) version 0.11.1. This is not part of the docker-compose file because this project relates to the API. The client (when finished) is provided as a reference implementation. Information about how to build and develop it will be included in the client README (TBC).
 
 ## Deployment
 
