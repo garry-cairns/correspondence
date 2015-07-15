@@ -15,7 +15,7 @@ webserver:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - webserver/dist:/home/dist/
     links:
       - api
-    volumes_from:
-      - client
