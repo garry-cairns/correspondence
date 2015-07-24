@@ -14,4 +14,3 @@ angular.module 'correspondenceApp'
     $scope.letterheads = Letterheads.query()
     $scope.contentTemplates = ContentTemplates.query()
     $scope.letterVariables = LetterVariables.query()
-    console.log($scope.logos)

@@ -31,6 +31,7 @@ class Common(Configuration):
         'django.contrib.staticfiles',
     )
     THIRD_PARTY_APPS = (
+        'corsheaders',
         'rest_framework',  # REST APIs
         'rest_framework_ember',
     )
@@ -50,6 +51,7 @@ class Common(Configuration):
         # Make sure djangosecure.middleware.SecurityMiddleware is listed first
         'djangosecure.middleware.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -269,3 +271,9 @@ class Common(Configuration):
         ),
     }
     # END REST FRAMEWORK CONFIGURATION
+
+    # CORS HEADERS
+    CORS_ORIGIN_WHITELIST = (
+        'localhost:3000',
+        'localhost'
+    )

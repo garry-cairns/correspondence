@@ -1,8 +1,35 @@
-<div id="logos">
+<div class="row">
+
+<div id="logos" class="col-md-4">
+    <h3>Logos</h3>
     <ul class="logos list-unstyled">
         <li ng-repeat="logo in logos.logo">
             <div class="logo" data-id="{{logo._id}}">
-                <section ng-bind-html="logo">{{logo.name}}</section>
+                <p ng-bind-html="logo.name"></p>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="letterheads" class="col-md-4">
+    <h3>Letterheads</h3>
+    <ul class="letterheads list-unstyled">
+        <li ng-repeat="letterhead in letterheads.letterhead">
+            <div class="letterhead" data-id="{{letterhead.id}}">
+                <p ng-bind-html="letterhead.name"></p>
+                <p ng-bind-html="letterhead.created"></p>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="contentTemplates" class="col-md-4">
+    <h3>Content templates</h3>
+    <ul class="contentTemplates list-unstyled">
+        <li ng-repeat="contentTemplate in contentTemplates.contentTemplate">
+            <div class="contentTemplates" data-id="{{contentTemplate.id}}">
+                <p ng-bind-html="contentTemplate.name"></p>
+                <p ng-bind-html="contentTemplate.text"></p>
             </div>
         </li>
     </ul>

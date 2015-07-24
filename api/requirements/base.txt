@@ -26,4 +26,5 @@ qrcode==5.1
 ipython==2.3.1
 reportlab==3.1.44
 rest_framework_ember==1.1.0
+django_cors_headers==1.1.0
 whitenoise==1.0.6

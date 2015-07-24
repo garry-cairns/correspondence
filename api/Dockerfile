@@ -21,12 +21,10 @@ RUN ["useradd", "python", "-s", "/bin/bash", "-m", "-g", "python", "-G", "python
 ENV HOME /home/python
 WORKDIR /home/python
 RUN ["chown", "-R", "python:python", "/home/python"]
+
 # add requirements.txt first so dependencies get cached
 ADD ./requirements.txt requirements.txt
 ADD ./requirements requirements
-
-# manage requirements
-ENV REQUIREMENTS_REFRESHED_AT 2015-02-25
 RUN ["pip3", "install", "-r", "requirements.txt"]
 
 # add the rest of our code

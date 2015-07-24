@@ -32,4 +32,3 @@ angular
         controller: 'SendCtrl'
       .otherwise
         redirectTo: '/'
-
