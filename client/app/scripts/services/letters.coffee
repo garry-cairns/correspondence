@@ -12,4 +12,5 @@ angular.module 'correspondenceApp'
     return $resource('http://localhost/api/letters/:id', { id: '@_id' }, {
             'query': method: 'GET', isArray: false
             'update': method: 'PUT'
+            'headers': {'Content-Type': 'application/pdf'}
       })
