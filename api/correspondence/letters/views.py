@@ -61,24 +61,6 @@ class LetterViewSet(ModelViewSet):
     serializer_class = LetterSerializer
     renderer_classes = [EmberJSONRenderer, BrowsableAPIRenderer, PDFRenderer]
 
-    @detail_route(renderer_classes=[PDFRenderer])
-    def letter(self, request, *args, **kwargs):
-        """
-        Takes a Letter instance and a django request and returns
-        a PDF letter as the request response.
-        """
-        letter = self.get_object()
-        response = HttpResponse(content_type="application/pdf")
-        response["Content-Disposition"] = "attachment; filename={0}.pdf".format(letter.letter_title)
-        letter = LetterCanvas(
-                letter.letterhead,
-                letter.content_template,
-                letter,
-                response,
-            )
-        letter.run()
-        return response
-
 
 class LetterVariableViewSet(ModelViewSet):
     """

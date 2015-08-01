@@ -45,3 +45,5 @@ media/
 # Docker leftovers
 .bash_history
 /webserver/dist/
+/api/correspondence/.ipython/
+/test.pdf

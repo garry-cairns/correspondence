@@ -208,7 +208,7 @@ class Letter(Model):
     addressee_is_representative = BooleanField(default=False)
     sender_name = CharField(max_length=100)
     sender_title = CharField(max_length=100)
-    barcode = CharField(max_length=100)
+    barcode = CharField(max_length=100, unique=True)
     additional_data = TextField( # client packages these into one string
             blank=True,
             null=True,

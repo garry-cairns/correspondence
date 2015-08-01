@@ -22,6 +22,7 @@ from .common import Common
 
 class Production(Common):
 
+    DEBUG = True
     # INSTALLED_APPS
     INSTALLED_APPS = Common.INSTALLED_APPS
     # END INSTALLED_APPS
